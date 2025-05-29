@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background: linear-gradient(120deg,#2980b9, #ad4494);
+    height: 100vh;
+    overflow: hidden;
+}
+
+html {
+    height: 100%;
+}
+
+#root {
+    height: 99%;
+}
