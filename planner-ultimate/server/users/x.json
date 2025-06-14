@@ -1,0 +1,8 @@
+{
+  "email": "b@x",
+  "nickname": "x",
+  "password": "$2a$10$W8iDuN9T7zGeNXpmQMuRY.PmePmnHRXLUe538kFx6ysT9K4ux9Azy",
+  "isBanned": false,
+  "isAdmin": true,
+  "isTester": false
+}

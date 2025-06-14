@@ -8,8 +8,12 @@ import React, {useState, useContext, useEffect} from 'react';
 import GlobalContext from './context/GlobalContext';
 import Events from './pages/Events';
 import ShowE from './pages/Show'
-
-
+import AdminPanel from './pages/AdminPanel'; // Zaimportuj nowy komponent
+import TesterPanel from './pages/TesterPanel'; // 1. Zaimportuj nowy komponent
+import Uwagi from './pages/Uwagi';
+import UwagiAdmin from './pages/UwagiAdmin'; // 1. Zaimportuj nową stronę
+import DodajOgloszenie from './pages/DodajOgloszenie'; // 1. Zaimportuj
+import ZarzadzajOgloszeniami from './pages/ZarzadzajOgloszeniami'; // 1. Zaimportuj
 //routing frontendu
 function App(){
   const [currentMonth, setCurrentMonth ] = useState(getMonth())
@@ -27,6 +31,13 @@ function App(){
     <Route path="/calendar" element={<Calendar/>} />
     <Route path="/event" element={<Events/>} />
     <Route path="/show" element={<ShowE/>} />
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/admin/uwagi" element={<UwagiAdmin />} /> {/* 2. Dodaj nową ścieżkę */}
+      <Route path="/tester" element={<TesterPanel />} /> {/* 2. Dodaj nową ścieżkę */}
+        <Route path="/uwagi" element={<Uwagi />}/>
+           <Route path="/admin/ogloszenia/dodaj" element={<DodajOgloszenie />} />
+        <Route path="/admin/ogloszenia" element={<ZarzadzajOgloszeniami />} /> {/* 2. Dodaj nową ścieżkę */}
+        
     </Routes>
     </>
   )

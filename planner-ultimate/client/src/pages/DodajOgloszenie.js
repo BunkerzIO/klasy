@@ -1,0 +1,66 @@
+// src/pages/DodajOgloszenie.jsx
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+export default function DodajOgloszenie() {
+  const [tytul, setTytul] = useState('');
+  const [tresc, setTresc] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const autor = localStorage.getItem('user'); // Pobieramy nick admina
+
+    if (!autor || !tytul.trim() || !tresc.trim()) {
+      alert('Wszystkie pola są wymagane.');
+      return;
+    }
+    
+    setIsSaving(true);
+    try {
+      const response = await fetch('http://localhost:5000/admin/ogloszenia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ autor, tytul, tresc }),
+      });
+      const data = await response.json();
+      if (data.status === 'ok') {
+        alert('Ogłoszenie zostało dodane!');
+        navigate('/admin');
+      } else {
+        throw new Error(data.error || 'Nie udało się dodać ogłoszenia.');
+      }
+    } catch (error) {
+      alert(`Wystąpił błąd: ${error.message}`);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <div className="flex justify-center items-center h-screen p-4" style={{ backgroundImage: "url(/img/bunker.jpg)", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className="bg-black/70 backdrop-blur-md shadow-xl rounded-lg p-8 w-full max-w-2xl text-white">
+        <h1 className="text-3xl font-bold mb-6 text-center text-yellow-400 [text-shadow:0_0_8px_rgba(234,179,8,0.4)]">
+          Dodaj Nowe Ogłoszenie
+        </h1>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="title" className="block text-gray-300 text-sm font-bold mb-2">Tytuł:</label>
+            <input type="text" id="title" value={tytul} onChange={(e) => setTytul(e.target.value)} disabled={isSaving} className="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-800/50 text-white leading-tight focus:outline-none focus:shadow-outline focus:border-yellow-500"/>
+          </div>
+          <div className="mb-6">
+            <label htmlFor="content" className="block text-gray-300 text-sm font-bold mb-2">Treść:</label>
+            <textarea id="content" value={tresc} onChange={(e) => setTresc(e.target.value)} disabled={isSaving} rows="6" className="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-800/50 text-white leading-tight focus:outline-none focus:shadow-outline focus:border-yellow-500"/>
+          </div>
+          <div className="flex justify-between items-center">
+            <button type="button" onClick={() => navigate('/admin')} disabled={isSaving} className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white font-bold rounded-lg shadow-md transition-colors duration-150 disabled:opacity-50">Cofnij</button>
+            <button type="submit" disabled={isSaving} className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-md transition-colors duration-150 disabled:opacity-50">
+              {isSaving ? 'Dodawanie...' : 'Dodaj Ogłoszenie'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}

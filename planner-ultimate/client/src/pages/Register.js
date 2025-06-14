@@ -1,11 +1,12 @@
 import { useState } from 'react'
-//strona zawierająca formularz rejestracji pobierająca dane z formularza i przesyłająca je do serwera
-function Register() {
 
-	const [nick, setName] = useState('')
+// Strona zawierająca formularz rejestracji
+function Register() {
+	const [nick, setNick] = useState('') // Zmieniłem setName na setNick dla spójności
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
-	//funkcja rejestrujaca użytkownika wykonywania przy zatwierdzaniu formularza, pobiera z niego dane i wysyła do serwera
+
+	// Funkcja rejestrująca użytkownika
 	async function registerUser(event) {
 		event.preventDefault()
 
@@ -16,70 +17,90 @@ function Register() {
 			},
 			body: JSON.stringify({
 				email,
-                nick,
+        nick,
 				password,
 			}),
 		})
 
 		const data = await response.json()
-		//sprawdza czy zaptyanie się powiodło
+		
 		if (data.status === 'ok') {
+			alert("Rejestracja pomyślna! Możesz się teraz zalogować.") // Lepiej, gdy alert jest przed przekierowaniem
 			window.location.href = '/login'
-            alert("Register uccesful")
-		}
-        else {
-            alert("User with that email exists")
-        }
+		} else {
+      alert("Użytkownik z tym adresem email już istnieje.")
+    }
 	}
 
 	return (
-		<div className='flex justify-center items-center h-screen'>
-		{/*formularz rejestracji. Użytkownik podaje 3 stringi: email, nick oraz hasło*/}
-		<form className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4' onSubmit={registerUser}>
-			<div className='mb-4'>
-				<label className='block text-gray-700 text-sm font-bold mb-2'>
-					Nazwa użytkownika:
-				</label>
-				<input className='shadow appearance-none border border-fuchsia-900 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'
-								value={nick}
-								onChange={(e) => setName(e.target.value)}
-								type="text"
-								placeholder="Nick"
+		<div 
+			className='flex justify-center items-center h-screen'
+			style={{
+				backgroundImage: "url(/img/bunker.jpg)", // Upewnij się, że obrazek jest w public/img/
+				backgroundSize: "cover",
+				backgroundPosition: "center",
+			}}
+		>
+			{/* Formularz rejestracji ze zmienionym stylem */}
+			<form 
+				className='bg-black/60 backdrop-blur-sm shadow-xl rounded-lg px-8 pt-6 pb-8 w-full max-w-sm' 
+				onSubmit={registerUser}
+			>
+				<div className='mb-4'>
+					<label className='block text-gray-200 text-sm font-bold mb-2'>
+						Nazwa użytkownika:
+					</label>
+					<input 
+						className='shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-800/50 text-white leading-tight focus:outline-none focus:shadow-outline focus:border-yellow-500'
+						value={nick}
+						onChange={(e) => setNick(e.target.value)}
+						type="text"
+						placeholder="Wprowadź nick"
 					/>	
 				</div>
 				<div className='mb-4'>
-				<label className='block text-gray-700 text-sm font-bold mb-2'>
-					Adres email:
-				</label>
-				<input className='shadow appearance-none border border-fuchsia-900 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								type="email"
-								placeholder="Email"
+					<label className='block text-gray-200 text-sm font-bold mb-2'>
+						Adres email:
+					</label>
+					<input 
+						className='shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-800/50 text-white leading-tight focus:outline-none focus:shadow-outline focus:border-yellow-500'
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						type="email"
+						placeholder="Wprowadź email"
 					/>	
 				</div>
 				<div className='mb-6'>
-				<label className='block text-gray-700 text-sm font-bold mb-2'>
-					Hasło:
-				</label>
-				<input className='shadow appearance-none border border-fuchsia-900 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline '
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								type="password"
-								placeholder="Password"
+					<label className='block text-gray-200 text-sm font-bold mb-2'>
+						Hasło:
+					</label>
+					<input 
+						className='shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-800/50 text-white leading-tight focus:outline-none focus:shadow-outline focus:border-yellow-500'
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						type="password"
+						placeholder="••••••••••"
 					/>
-				<p className='text-fuchsia-900 text-xs italic '>Pamiętaj, że hasło musi spełniać wymogi bezpieczeństwa.</p>
+					<p className='text-gray-400 text-xs italic mt-2'>Pamiętaj, że hasło musi spełniać wymogi bezpieczeństwa.</p>
 				</div>
-				<div className='flex items-center justify-between'>
-				<input type="submit" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' value="Zaloguj"/>
+				<div className='flex items-center justify-center'>
+					<button type="submit" className='
+						px-10 py-3 
+						bg-gradient-to-b from-yellow-600 to-orange-800 
+						text-white font-bold uppercase text-sm tracking-wider
+						border-2 border-black/30 rounded-lg 
+						shadow-lg hover:shadow-xl
+						hover:from-yellow-500 hover:to-orange-700
+						focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-yellow-500
+						active:shadow-inner active:translate-y-px
+						transition-all duration-150 ease-in-out
+					'>
+						Zarejestruj
+					</button>
 				</div>
-			<p className='text-center text-gray-500 text-xs'></p>
-		</form>
-	</div>
-		
+			</form>
+		</div>
 	)
 }
 
 export default Register
-
-

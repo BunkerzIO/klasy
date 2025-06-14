@@ -1,5 +1,8 @@
 {
-  "email": "w@w",
-  "nick": "a",
-  "password": "$2a$10$A/inns8epWPveSjOPXCH6u0ps0StLdGqjDOLP.mHPwUB2ZMyhBe.W"
+  "email": "a@a",
+  "nickname": "a",
+  "password": "$2a$10$o86I6WJaXzSysW/So7i6YummMIwniGvFAGetLg4.ehJ1xO.8Fw1H6",
+  "isBanned": false,
+  "isAdmin": false,
+  "isTester": true
 }
