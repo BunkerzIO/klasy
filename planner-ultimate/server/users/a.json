@@ -4,5 +4,5 @@
   "password": "$2a$10$o86I6WJaXzSysW/So7i6YummMIwniGvFAGetLg4.ehJ1xO.8Fw1H6",
   "isBanned": false,
   "isAdmin": false,
-  "isTester": true
+  "isTester": false
 }
