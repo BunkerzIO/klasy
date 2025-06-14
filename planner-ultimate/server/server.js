@@ -167,28 +167,64 @@ app.get('/admin/users', async (req, res) => {
             })
         );
 
-        const nonAdminUsers = allUsersData
-            .filter(user => user.isAdmin !== true)
+        // ZMIENIONY FILTR: Teraz zwraca tylko użytkowników, którzy NIE SĄ adminami I NIE SĄ zbanowani
+        const activeUsers = allUsersData
+            .filter(user => user.isAdmin !== true && user.isBanned !== true)
             .map(user => {
                 return {
-                    nick: user.nickname,
-                    email: user.email,
-                    isAdmin: user.isAdmin,
-                    isBanned: user.isBanned,
-                    isTester: user.isTester,
+                    nick: user.nickname, email: user.email, isAdmin: user.isAdmin,
+                    isBanned: user.isBanned, isTester: user.isTester,
                 };
             });
         
-        res.json({ status: 'ok', users: nonAdminUsers });
+        res.json({ status: 'ok', users: activeUsers });
 
     } catch (error) {
         if (error.code === 'ENOENT') {
             return res.json({ status: 'ok', users: [] });
         }
-        console.error('Error fetching users for admin:', error);
         res.status(500).json({ status: 'error', error: 'Could not retrieve user list' });
     }
 });
+
+/**
+ * NOWY ENDPOINT: Zwraca listę tylko ZBANOWANYCH użytkowników
+ */
+app.get('/admin/users/banned', async (req, res) => {
+    try {
+        const usersDir = path.join(__dirname, 'users');
+        const files = await fsPromises.readdir(usersDir);
+        
+        const allUsersData = await Promise.all(
+          files
+            .filter(file => file.endsWith('.json'))
+            .map(async (file) => {
+              const filePath = path.join(usersDir, file);
+              const data = await fsPromises.readFile(filePath, 'utf8');
+              return JSON.parse(data);
+            })
+        );
+
+        // Ten endpoint filtruje i zwraca tylko zbanowanych użytkowników
+        const bannedUsers = allUsersData
+            .filter(user => user.isBanned === true)
+            .map(user => {
+                return {
+                    nick: user.nickname, email: user.email, isAdmin: user.isAdmin,
+                    isBanned: user.isBanned, isTester: user.isTester,
+                };
+            });
+        
+        res.json({ status: 'ok', users: bannedUsers });
+
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            return res.json({ status: 'ok', users: [] });
+        }
+        res.status(500).json({ status: 'error', error: 'Could not retrieve user list' });
+    }
+});
+
 
 // === DODAJ TEN FRAGMENT TUTAJ ===
 app.put('/admin/user/:nick', async (req, res) => {
